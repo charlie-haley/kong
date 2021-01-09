@@ -47,7 +47,7 @@
           - http2
         ingress:
           # Enable/disable exposure using ingress.
-          enabled: false
+          enabled: true
           # TLS secret name.
           tls: kong-k3s-cert
           # Ingress hostname
