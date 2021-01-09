@@ -17,7 +17,9 @@
     chart_ref: kong/kong
     release_namespace: kong
     update_repo_cache: true
-    values: 
+    values:
+      ingressController:
+        installCRDs: false
       env:
         database: "on"
         nginx_worker_processes: "2"
