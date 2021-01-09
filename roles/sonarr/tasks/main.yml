@@ -80,30 +80,7 @@
             kubernetes.io/ingress.class: "nginx"
             cert-manager.io/cluster-issuer: letsencrypt-aws-prod
       proxy:
-        enabled: true
-        http:
-          # Enable plaintext HTTP listen for the proxy
-          enabled: true
-          servicePort: 8000
-          containerPort: 8000
-          # Set a nodePort which is available if service type is NodePort
-          # nodePort: 32080
-          # Additional listen parameters, e.g. "reuseport", "backlog=16384"
-          parameters: []
-
-        tls:
-          # Enable HTTPS listen for the proxy
-          enabled: true
-          servicePort: 8443
-          containerPort: 8443
-          # Set a target port for the TLS port in proxy service, useful when using TLS
-          # termination on an ELB.
-          # overrideServiceTargetPort: 8000
-          # Set a nodePort which is available if service type is NodePort
-          # nodePort: 32443
-          # Additional listen parameters, e.g. "reuseport", "backlog=16384"
-          parameters:
-          - http2
+        enabled: false
       nodeSelector:
         kubernetes.io/arch: amd64
       # Enable autoscaling using HorizontalPodAutoscaler
