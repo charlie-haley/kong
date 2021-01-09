@@ -83,6 +83,8 @@
           failureThreshold: 3
       postgresql:
         enabled: false
+      proxy:
+        enabled: false
       nodeSelector:
         kubernetes.io/arch: amd64
       # Enable autoscaling using HorizontalPodAutoscaler
