@@ -21,7 +21,7 @@
       ingressController:
         installCRDs: false
       env:
-        database: "on"
+        database: "postgres"
         nginx_worker_processes: "2"
         proxy_access_log: /dev/stdout
         admin_access_log: /dev/stdout
