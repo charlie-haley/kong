@@ -1,0 +1,105 @@
+***REMOVED***
+- name: Ensure the kong Namespace exists.
+  community.kubernetes.k8s:
+    api_version: v1
+    kind: Namespace
+    name: kong
+    state: present
+
+- name: Add kong chart repo
+  community.kubernetes.helm_repository:
+    name: kong
+    repo_url: "https://charts.konghq.com"
+
+- name: Deploy latest version of kong chart inside kong namespace and update helm repos
+  community.kubernetes.helm:
+    name: kong
+    chart_ref: kong/kong
+    release_namespace: kong
+    update_repo_cache: true
+    values: 
+      env:
+        database: "on"
+        nginx_worker_processes: "2"
+        proxy_access_log: /dev/stdout
+        admin_access_log: /dev/stdout
+        admin_gui_access_log: /dev/stdout
+        portal_api_access_log: /dev/stdout
+        proxy_error_log: /dev/stderr
+        admin_error_log: /dev/stderr
+        admin_gui_error_log: /dev/stderr
+        portal_api_error_log: /dev/stderr
+        prefix: /kong_prefix/
+      image:
+        repository: kong
+        tag: "2.2"
+        pullPolicy: IfNotPresent
+      admin:
+        enabled: true
+        type: NodePort
+        tls:
+          enabled: true
+          servicePort: 8444
+          containerPort: 8444
+          parameters:
+          - http2
+      ingress:
+        enabled: true
+        annotations:
+          cert-manager.io/cluster-issuer: letsencrypt-aws-prod
+        labels: {}
+        hosts:
+          - host: sonarr.k3pi.xyz
+            paths:
+              - path: /
+                # Ignored if not kubeVersion >= 1.14-0
+                pathType: Prefix
+        tls:
+        - hosts:
+          - sonarr.k3pi.xyz
+          secretName: sonarr-k3s-cert
+        # general properties
+        livenessProbe:
+          httpGet:
+            path: "/healthz"
+            port: 10254
+            scheme: HTTP
+          initialDelaySeconds: 5
+          timeoutSeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: "/healthz"
+            port: 10254
+            scheme: HTTP
+          initialDelaySeconds: 5
+          timeoutSeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
+      postgresql:
+        enabled: true
+      nodeSelector:
+        kubernetes.io/arch: amd64
+      # Enable autoscaling using HorizontalPodAutoscaler
+      # When configuring an HPA, you must set resource requests on all containers via
+      # "resources" and, if using the controller, "ingressController.resources" in values.yaml
+      autoscaling:
+        enabled: false
+        minReplicas: 2
+        maxReplicas: 5
+        ## targetCPUUtilizationPercentage only used if the cluster doesn't support autoscaling/v2beta
+        targetCPUUtilizationPercentage:
+        ## Otherwise for clusters that do support autoscaling/v2beta, use metrics
+        metrics:
+          - type: Resource
+            resource:
+              name: cpu
+              target:
+                type: Utilization
+                averageUtilization: 80
+      serviceMonitor:
+        enabled: true
+        namespace: monitoring

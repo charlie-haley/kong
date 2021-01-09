@@ -1,0 +1,8 @@
+- name: Deploy sonarr docker container
+  hosts: all
+  remote_user: root
+  environment:
+    K8S_AUTH_KUBECONFIG: /tmp/config.yml
+
+  roles:
+    - sonarr
