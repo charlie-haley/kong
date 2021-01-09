@@ -21,7 +21,7 @@
       ingressController:
         installCRDs: false
       env:
-        database: "postgres"
+        database: "off"
         nginx_worker_processes: "2"
         proxy_access_log: /dev/stdout
         admin_access_log: /dev/stdout
@@ -82,7 +82,7 @@
           successThreshold: 1
           failureThreshold: 3
       postgresql:
-        enabled: true
+        enabled: false
       nodeSelector:
         kubernetes.io/arch: amd64
       # Enable autoscaling using HorizontalPodAutoscaler
