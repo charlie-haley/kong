@@ -39,12 +39,10 @@
       admin:
         enabled: true
         type: NodePort
-        tls:
+        http:
           enabled: true
-          servicePort: 8444
-          containerPort: 8444
-          parameters:
-          - http2
+        tls:
+          enabled: false
         livenessProbe:
           httpGet:
             path: "/healthz"
@@ -68,12 +66,18 @@
       postgresql:
         enabled: false
       manager:
+        enabled: true
+        http:
+          enabled: true
+        tls:
+          enabled: false
         ingress:
           enabled: true
           tls: kong-k3s-cert
           hostname: kong.k3pi.xyz
-          annotations: {}
           path: /
+          annotations:
+            cert-manager.io/cluster-issuer: letsencrypt-aws-prod
       proxy:
         enabled: true
         http:
