@@ -45,18 +45,6 @@
           containerPort: 8444
           parameters:
           - http2
-        ingress:
-          # Enable/disable exposure using ingress.
-          enabled: true
-          # TLS secret name.
-          tls: kong-k3s-cert
-          # Ingress hostname
-          hostname: kong.k3pi.xyz
-          # Map of ingress annotations.
-          annotations: {}
-          # Ingress path.
-          path: /
-        # general properties
         livenessProbe:
           httpGet:
             path: "/healthz"
@@ -79,6 +67,13 @@
           failureThreshold: 3
       postgresql:
         enabled: false
+      manager:
+        ingress:
+          enabled: true
+          tls: kong-k3s-cert
+          hostname: kong.k3pi.xyz
+          annotations: {}
+          path: /
       proxy:
         enabled: true
         http:
@@ -104,21 +99,6 @@
           # Additional listen parameters, e.g. "reuseport", "backlog=16384"
           parameters:
           - http2
-        ingress:
-          enabled: true
-          # TLS section. Unlike other ingresses, this follows the format at
-          # https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
-          tls:
-          - hosts:
-            - kong.k3pi.xyz
-            secretName: kong-k3s-cert
-          - hosts:
-            - kong.k3pi.xyz
-            secretName: kong-k3s-cert
-          # Map of ingress annotations.
-          annotations: {}
-          # Ingress path.
-          path: /
       nodeSelector:
         kubernetes.io/arch: amd64
       # Enable autoscaling using HorizontalPodAutoscaler
