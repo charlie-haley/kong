@@ -51,15 +51,15 @@
           cert-manager.io/cluster-issuer: letsencrypt-aws-prod
         labels: {}
         hosts:
-          - host: sonarr.k3pi.xyz
+          - host: kong.k3pi.xyz
             paths:
               - path: /
                 # Ignored if not kubeVersion >= 1.14-0
                 pathType: Prefix
         tls:
         - hosts:
-          - sonarr.k3pi.xyz
-          secretName: sonarr-k3s-cert
+          - kong.k3pi.xyz
+          secretName: kong-k3s-cert
         # general properties
         livenessProbe:
           httpGet:
