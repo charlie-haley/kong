@@ -61,6 +61,8 @@
       admin:
         enabled: true
         type: NodePort
+        tls:
+          enabled: false
         http:
           enabled: true
           servicePort: 8001
