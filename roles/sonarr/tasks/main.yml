@@ -23,18 +23,19 @@
     release_namespace: kong
     update_repo_cache: true
     values:
-      global:
       image:
         registry: docker.io
         repository: bitnami/postgresql
         tag: 11.10.0-debian-10-r52
         pullPolicy: IfNotPresent
-      postgresqlPostgresPassword: kong
-      postgresqlUsername: kong
-      postgresqlPassword: kong
-      ## PostgreSQL password using existing secret
-      ## existingSecret: secret
-      postgresqlDatabase: kong
+      global:
+        postgresqlPostgresPassword: kong
+        postgresqlUsername: kong
+        postgresqlPassword: kong
+        ## PostgreSQL password using existing secret
+        ## existingSecret: secret
+        postgresqlDatabase: kong
+        servicePort: 5432
 
 - name: Deploy control plane node
   community.kubernetes.helm:
