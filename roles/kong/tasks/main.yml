@@ -130,9 +130,8 @@
 
 - name: sync config files to worker
   copy:
-    src: config/
+    src: files/config/
     dest: /tmp/kongconf
-    remote_src: yes
 
 - name: apply config deck
   shell: /usr/local/bin/deck sync
