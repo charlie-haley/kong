@@ -132,7 +132,6 @@
   copy:
     src: config/
     dest: /tmp/kongconf
-    remote_src: yes
 
 - name: apply config deck
   command: chdir=/tmp/kongconf deck sync
