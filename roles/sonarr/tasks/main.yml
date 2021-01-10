@@ -39,6 +39,14 @@
           enabled: true
         tls:
           enabled: false
+        ingress:
+          enabled: true
+          tls: kong-k3s-cert
+          hostname: kong.k3pi.xyz
+          path: /
+          annotations:
+            kubernetes.io/ingress.class: "nginx"
+            cert-manager.io/cluster-issuer: letsencrypt-aws-prod
         livenessProbe:
           httpGet:
             path: "/healthz"
@@ -61,20 +69,6 @@
           failureThreshold: 3
       postgresql:
         enabled: false
-      manager:
-        enabled: true
-        http:
-          enabled: true
-        tls:
-          enabled: false
-        ingress:
-          enabled: true
-          tls: kong-k3s-cert
-          hostname: kong.k3pi.xyz
-          path: /
-          annotations:
-            kubernetes.io/ingress.class: "nginx"
-            cert-manager.io/cluster-issuer: letsencrypt-aws-prod
       cluster:
         enabled: true
         tls:
@@ -103,7 +97,6 @@
       secretVolumes:
       - kong-cluster-cert
       env:
-        database: 'off'
         role: data_plane
         cluster_cert: /etc/secrets/kong-cluster-cert/tls.crt
         cluster_cert_key: /etc/secrets/kong-cluster-cert/tls.key
