@@ -53,7 +53,7 @@
         cluster_cert_key: /etc/secrets/kong-cluster-cert/tls.key
         pg_user: postgres
         pg_host: kongdb-postgresql.kong.svc.cluster.local
-        pg_password: B4xZEmTT41
+        pg_password: kong
       image:
         repository: kong
         tag: "2.2"
