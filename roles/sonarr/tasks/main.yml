@@ -11,27 +11,22 @@
     name: kong
     repo_url: "https://charts.konghq.com"
 
-- name: Deploy latest version of kong chart inside kong namespace and update helm repos
+- name: Deploy control plane node
   community.kubernetes.helm:
-    name: kong
+    name: control
     chart_ref: kong/kong
     release_namespace: kong
     update_repo_cache: true
     values:
       ingressController:
         installCRDs: false
+      secretVolumes:
+      - kong-cluster-cert
       env:
-        database: "off"
-        nginx_worker_processes: "2"
-        proxy_access_log: /dev/stdout
-        admin_access_log: /dev/stdout
-        admin_gui_access_log: /dev/stdout
-        portal_api_access_log: /dev/stdout
-        proxy_error_log: /dev/stderr
-        admin_error_log: /dev/stderr
-        admin_gui_error_log: /dev/stderr
-        portal_api_error_log: /dev/stderr
-        prefix: /kong_prefix/
+        database: off
+        role: control_plane
+        cluster_cert: /etc/secrets/kong-cluster-cert/tls.crt
+        cluster_cert_key: /etc/secrets/kong-cluster-cert/tls.key
       image:
         repository: kong
         tag: "2.2"
@@ -79,27 +74,51 @@
           annotations:
             kubernetes.io/ingress.class: "nginx"
             cert-manager.io/cluster-issuer: letsencrypt-aws-prod
+      cluster:
+        enabled: true
+        tls:
+          enabled: true
+          servicePort: 8005
+          containerPort: 8005
       proxy:
         enabled: false
       nodeSelector:
         kubernetes.io/arch: amd64
-      # Enable autoscaling using HorizontalPodAutoscaler
-      # When configuring an HPA, you must set resource requests on all containers via
-      # "resources" and, if using the controller, "ingressController.resources" in values.yaml
-      autoscaling:
+      serviceMonitor:
+        enabled: true
+        namespace: monitoring
+
+
+- name: Deploy data plane node
+  community.kubernetes.helm:
+    name: data
+    chart_ref: kong/kong
+    release_namespace: kong
+    update_repo_cache: true
+    values:
+      ingressController:
+        installCRDs: false
+      secretVolumes:
+      - kong-cluster-cert
+      env:
+        database: off
+        role: data_plane
+        cluster_cert: /etc/secrets/kong-cluster-cert/tls.crt
+        cluster_cert_key: /etc/secrets/kong-cluster-cert/tls.key
+        lua_ssl_trusted_certificate: /etc/secrets/kong-cluster-cert/tls.crt
+        cluster_control_plane: control-kong-cluster.kong.svc.cluster.local:8005
+      image:
+        repository: kong
+        tag: "2.2"
+        pullPolicy: IfNotPresent
+      admin:
         enabled: false
-        minReplicas: 2
-        maxReplicas: 5
-        ## targetCPUUtilizationPercentage only used if the cluster doesn't support autoscaling/v2beta
-        targetCPUUtilizationPercentage:
-        ## Otherwise for clusters that do support autoscaling/v2beta, use metrics
-        metrics:
-          - type: Resource
-            resource:
-              name: cpu
-              target:
-                type: Utilization
-                averageUtilization: 80
+      postgresql:
+        enabled: false
+      manager:
+        enabled: false
+      nodeSelector:
+        kubernetes.io/arch: amd64
       serviceMonitor:
         enabled: true
         namespace: monitoring
