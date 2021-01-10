@@ -24,7 +24,7 @@
       secretVolumes:
       - kong-cluster-cert
       env:
-        database: 'postgres'
+        database: postgres
         role: control_plane
         cluster_cert: /etc/secrets/kong-cluster-cert/tls.crt
         cluster_cert_key: /etc/secrets/kong-cluster-cert/tls.key
@@ -73,7 +73,7 @@
       secretVolumes:
       - kong-cluster-cert
       env:
-        database: "off"
+        database: postgres
         role: data_plane
         cluster_cert: /etc/secrets/kong-cluster-cert/tls.crt
         cluster_cert_key: /etc/secrets/kong-cluster-cert/tls.key
