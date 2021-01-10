@@ -99,10 +99,6 @@
         postgresqlDatabase: kong
         service:
           port: 5432
-      manager:
-        enabled: false
-      proxy:
-        enabled: false
       nodeSelector:
         kubernetes.io/arch: amd64
       serviceMonitor:
