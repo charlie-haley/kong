@@ -65,6 +65,13 @@
           enabled: true
           servicePort: 8001
           containerPort: 8001
+        ingress:
+          enabled: true
+          tls: kong-k3s-cert
+          hostname: kong.k3pi.xyz
+          path: /
+          annotations:
+            cert-manager.io/cluster-issuer: letsencrypt-aws-prod
       postgresql:
         enabled: false
       cluster:
