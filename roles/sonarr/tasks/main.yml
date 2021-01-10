@@ -28,10 +28,11 @@
         repository: bitnami/postgresql
         tag: 11.10.0-debian-10-r52
         pullPolicy: IfNotPresent
-        postgresqlPassword: kong
       global:
-        postgresqlDatabase: kong
-        servicePort: 5432
+        postgresql:
+          postgresqlDatabase: kong
+          postgresqlPassword: kong
+          servicePort: 5432
 
 - name: Deploy control plane node
   community.kubernetes.helm:
@@ -52,7 +53,7 @@
         cluster_cert_key: /etc/secrets/kong-cluster-cert/tls.key
         pg_user: postgres
         pg_host: kongdb-postgresql.kong.svc.cluster.local
-        pg_password: kong
+        pg_password: B4xZEmTT41
       image:
         repository: kong
         tag: "2.2"
