@@ -100,17 +100,12 @@
       secretVolumes:
       - kong-cluster-cert
       env:
-        database: postgres
+        database: off
         role: data_plane
         cluster_cert: /etc/secrets/kong-cluster-cert/tls.crt
         cluster_cert_key: /etc/secrets/kong-cluster-cert/tls.key
         lua_ssl_trusted_certificate: /etc/secrets/kong-cluster-cert/tls.crt
         cluster_control_plane: control-kong-cluster.kong.svc.cluster.local:8005
-        pg_host: kongdb-postgresql.kong.svc.cluster.local
-        pg_port: 5432
-        pg_user: kong
-        pg_password: kong
-        pg_database: kong
       image:
         repository: kong
         tag: "2.2"
