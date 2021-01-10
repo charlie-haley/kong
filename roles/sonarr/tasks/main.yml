@@ -28,6 +28,7 @@
         repository: bitnami/postgresql
         tag: 11.10.0-debian-10-r52
         pullPolicy: IfNotPresent
+        postgresqlPassword: kong
       global:
         postgresqlDatabase: kong
         servicePort: 5432
@@ -50,6 +51,7 @@
         cluster_cert: /etc/secrets/kong-cluster-cert/tls.crt
         cluster_cert_key: /etc/secrets/kong-cluster-cert/tls.key
         pg_host: kongdb-postgresql.kong.svc.cluster.local
+        pg_password: kong
       image:
         repository: kong
         tag: "2.2"
