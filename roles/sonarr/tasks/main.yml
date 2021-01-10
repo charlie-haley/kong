@@ -19,6 +19,7 @@
     update_repo_cache: true
     values:
       ingressController:
+        enabled: false
         installCRDs: false
       secretVolumes:
       - kong-cluster-cert
@@ -97,6 +98,7 @@
     update_repo_cache: true
     values:
       ingressController:
+        enabled: false
         installCRDs: false
       secretVolumes:
       - kong-cluster-cert
