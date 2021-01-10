@@ -5,4 +5,4 @@
     K8S_AUTH_KUBECONFIG: /tmp/config.yml
 
   roles:
-    - sonarr
+    - kong
