@@ -29,9 +29,6 @@
         tag: 11.10.0-debian-10-r52
         pullPolicy: IfNotPresent
       global:
-        postgresqlPostgresPassword: kong
-        ## PostgreSQL password using existing secret
-        ## existingSecret: secret
         postgresqlDatabase: kong
         servicePort: 5432
 
@@ -53,10 +50,6 @@
         cluster_cert: /etc/secrets/kong-cluster-cert/tls.crt
         cluster_cert_key: /etc/secrets/kong-cluster-cert/tls.key
         pg_host: kongdb-postgresql.kong.svc.cluster.local
-        pg_port: 5432
-        pg_user: postgres
-        pg_password: kong
-        pg_database: kong
       image:
         repository: kong
         tag: "2.2"
