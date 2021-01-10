@@ -117,6 +117,8 @@
         enabled: false
       manager:
         enabled: false
+      proxy:
+        enabled: false
       nodeSelector:
         kubernetes.io/arch: amd64
       serviceMonitor:
