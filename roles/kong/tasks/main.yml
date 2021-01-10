@@ -132,6 +132,7 @@
   copy:
     src: config/
     dest: /tmp/kongconf
+    remote_src: yes
 
 - name: apply config deck
   shell: /usr/local/bin/deck sync
