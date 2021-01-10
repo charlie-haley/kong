@@ -30,8 +30,6 @@
         pullPolicy: IfNotPresent
       global:
         postgresqlPostgresPassword: kong
-        postgresqlUsername: kong
-        postgresqlPassword: kong
         ## PostgreSQL password using existing secret
         ## existingSecret: secret
         postgresqlDatabase: kong
@@ -56,7 +54,7 @@
         cluster_cert_key: /etc/secrets/kong-cluster-cert/tls.key
         pg_host: kongdb-postgresql.kong.svc.cluster.local
         pg_port: 5432
-        pg_user: kong
+        pg_user: postgres
         pg_password: kong
         pg_database: kong
       image:
