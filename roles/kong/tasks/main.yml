@@ -129,7 +129,7 @@
         namespace: monitoring
 
 - name: sync config files to worker
-  synchronize:
+  copy:
     src: config/
     dest: /tmp/kongconf
   remote_src: yes
