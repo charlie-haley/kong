@@ -47,28 +47,12 @@
           annotations:
             kubernetes.io/ingress.class: "nginx"
             cert-manager.io/cluster-issuer: letsencrypt-aws-prod
-        livenessProbe:
-          httpGet:
-            path: "/healthz"
-            port: 10254
-            scheme: HTTP
-          initialDelaySeconds: 5
-          timeoutSeconds: 5
-          periodSeconds: 10
-          successThreshold: 1
-          failureThreshold: 3
-        readinessProbe:
-          httpGet:
-            path: "/healthz"
-            port: 10254
-            scheme: HTTP
-          initialDelaySeconds: 5
-          timeoutSeconds: 5
-          periodSeconds: 10
-          successThreshold: 1
-          failureThreshold: 3
       postgresql:
-        enabled: false
+        enabled: true
+        postgresqlUsername: kong
+        postgresqlDatabase: kong
+        service:
+          port: 5432
       cluster:
         enabled: true
         tls:
