@@ -37,16 +37,8 @@
         type: NodePort
         http:
           enabled: true
-        tls:
-          enabled: false
-        ingress:
-          enabled: true
-          tls: kong-k3s-cert
-          hostname: kong.k3pi.xyz
-          path: /
-          annotations:
-            kubernetes.io/ingress.class: "nginx"
-            cert-manager.io/cluster-issuer: letsencrypt-aws-prod
+          servicePort: 8001
+          containerPort: 8001
       postgresql:
         enabled: true
         postgresqlUsername: kong
@@ -99,6 +91,10 @@
         postgresqlDatabase: kong
         service:
           port: 5432
+      manager:
+        enabled: false
+      proxy:
+        enabled: false
       nodeSelector:
         kubernetes.io/arch: amd64
       serviceMonitor:
