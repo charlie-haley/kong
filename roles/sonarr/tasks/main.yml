@@ -97,6 +97,7 @@
       secretVolumes:
       - kong-cluster-cert
       env:
+        database: "off"
         role: data_plane
         cluster_cert: /etc/secrets/kong-cluster-cert/tls.crt
         cluster_cert_key: /etc/secrets/kong-cluster-cert/tls.key
@@ -109,7 +110,11 @@
       admin:
         enabled: false
       postgresql:
-        enabled: false
+        enabled: true
+        postgresqlUsername: kong
+        postgresqlDatabase: kong
+        service:
+          port: 5432
       manager:
         enabled: false
       proxy:
