@@ -1,7 +1,7 @@
 _format_version: "1.1"
 services:
 - connect_timeout: 60000
-  host: example.com
+  host: google.com
   name: foo
   port: 80
   protocol: http
