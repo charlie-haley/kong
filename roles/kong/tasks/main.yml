@@ -134,6 +134,6 @@
     dest: /tmp/kongconf
 
 - name: apply config deck
-  shell: deck sync
+  shell: /usr/local/bin/deck sync
   args:
     chdir: /tmp/kongconf
