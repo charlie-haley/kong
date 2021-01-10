@@ -50,6 +50,7 @@
         role: control_plane
         cluster_cert: /etc/secrets/kong-cluster-cert/tls.crt
         cluster_cert_key: /etc/secrets/kong-cluster-cert/tls.key
+        pg_user: postgres
         pg_host: kongdb-postgresql.kong.svc.cluster.local
         pg_password: kong
       image:
