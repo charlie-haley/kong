@@ -1,70 +1,70 @@
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
+---
+resource_types:
+- name: slack-alert
+  type: docker-image
+  source:
+    repository: arbourd/concourse-slack-alert-resource
   
-***REMOVED***
-***REMOVED***
-***REMOVED***
-  ***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-  ***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
+resources:
+  - name: notify
+    type: slack-alert
+    source:
+      url: {{alert-webhook-url}}
+  - name: kong
+    type: git
+    icon: github
+    source:
+      uri: git@github.com:charlie-haley/kong.git
+      branch: master
+      private_key: {{private-repo-key}}
 
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-        ***REMOVED***
-        ***REMOVED*** 
-***REMOVED***
-***REMOVED***
-***REMOVED***
-        ***REMOVED***
-***REMOVED*** 
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
+jobs:
+  - name: deploy
+    plan:
+    - get: kong
+      trigger: true
+    - task: run-playbook
+      on_success:
+        put: notify
+        params:
+          alert_type: success
+      on_failure:
+        put: notify
+        params:
+          alert_type: failed
+      on_abort:
+        put: notify
+        params:
+          alert_type: aborted
+      config:
+        platform: linux
+        image_resource:
+          type: docker-image
+          source: 
+            repository: cytopia/ansible
+            tag: latest-awshelm3.4
+        inputs:
+          - name: kong
+        params: 
+          ANSIBLE_HOST_KEY_CHECKING: false
+          ANSIBLE_FORCE_COLOR: true
+          PRIVATE_KEY: ((ansible-private-key))
+          KUBE_CONFIG: ((kube-config))
+          DECK_CONFIG: ((deck-config))
+        run:
+          dir: kong
+          path: /bin/sh
+          args:
+            - -c
+            - |
+              printf '%s\n' "$KUBE_CONFIG" > /tmp/config.yml
+              chmod 600 /tmp/config.yml
+              pip3 install openshift
+              ansible-galaxy collection install community.kubernetes
+              apk add curl
+              curl -sL https://github.com/kong/deck/releases/download/v1.2.1/deck_1.2.1_linux_amd64.tar.gz -o deck.tar.gz
+              tar -xf deck.tar.gz -C /tmp
+              cp /tmp/deck /usr/local/bin/
+              printf '%s\n' "$DECK_CONFIG" > /root/.deck.yaml
+              chmod 600 /tmp/config.yml
+              ansible-playbook playbook.yml -i inventory -vvv --private-key=ansible_private_key_rsa

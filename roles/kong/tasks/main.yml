@@ -1,4 +1,4 @@
-***REMOVED***
+---
 - name: Ensure the kong Namespace exists.
   community.kubernetes.k8s:
     api_version: v1
