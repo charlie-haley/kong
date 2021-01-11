@@ -9,7 +9,7 @@ resources:
   - name: notify
     type: slack-alert
     source:
-      url: {{alert-webhook-url}}
+      url: {{slack-webhook-url}}
   - name: kong
     type: git
     icon: github
